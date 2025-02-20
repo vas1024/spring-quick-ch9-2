@@ -1,6 +1,7 @@
 package ch9.controlers;
 
 import ch9.services.LoggedUserManagementService;
+import ch9.services.LoginCountService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +11,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MainController {
   private final LoggedUserManagementService loggedUserManagementService;
-  public MainController( LoggedUserManagementService loggedUserManagementService){
+  private final LoginCountService loginCountService;
+  public MainController( LoggedUserManagementService loggedUserManagementService,
+                         LoginCountService loginCountService ){
     this.loggedUserManagementService = loggedUserManagementService;
+    this.loginCountService = loginCountService;
   }
 
 
@@ -21,6 +25,7 @@ public class MainController {
     if( username != null ){
       model.addAttribute("username", username );
       model.addAttribute("sessionid", httpSession.getId() );
+      model.addAttribute("count", loginCountService.getCount());
       return "main.html";
     }
     else return "redirect:/";
